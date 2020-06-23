@@ -7,6 +7,17 @@
 "
 " original version from Steve Losh's gist: https://gist.github.com/1038710
 
+" check for the side effects of having run the non-'after/' ftplugin in this
+" project.
+" Note: b:mkd_known_filetypes, if it exists, must be a dictionary type.
+if !(
+            \       ( !empty(getbufvar('%', 'did_ftplugin')) )
+            \       &&
+            \       ( exists('#Mkd') || (type(getbufvar('%', 'mkd_known_filetypes')) == 4) )
+            \   )
+    finish
+endif
+
 function! s:is_mkdCode(lnum)
     let name = synIDattr(synID(a:lnum, 1, 0), 'name')
     return (name =~ '^mkd\%(Code$\|Snippet\)' || name != '' && name !~ '^\%(mkd\|html\)')
