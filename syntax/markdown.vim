@@ -52,8 +52,6 @@ else
     let s:oneline = ' oneline'
 endif
 syn region mkdItalic matchgroup=mkdItalic start="\%(\*\|_\)"    end="\%(\*\|_\)"
-"-? syn region mkdItalic matchgroup=mkdItalic start="\%(^ \{,3}\*\[[^]]\+]:\s*\S\)\@!\%(\*\|_\)"    end="\%(\*\|_\)"
-"? ... syn region mkdItalic matchgroup=mkdItalic start="\%(^ \{,3}\*.*:\s*\S\)\@<!\%(\*\|_\)"    end="\%(\*\|_\)"
 syn region mkdBold matchgroup=mkdBold start="\%(\*\*\|__\)"    end="\%(\*\*\|__\)"
 syn region mkdBoldItalic matchgroup=mkdBoldItalic start="\%(\*\*\*\|___\)"    end="\%(\*\*\*\|___\)"
 execute 'syn region htmlItalic matchgroup=mkdItalic start="\%(^\|\s\)\zs\*\ze[^\\\*\t ]\%(\%([^*]\|\\\*\|\n\)*[^\\\*\t ]\)\?\*\_W" end="[^\\\*\t ]\zs\*\ze\_W" keepend contains=@Spell' . s:oneline . s:concealends
@@ -112,16 +110,7 @@ syn match  mkdCode         /^\s*\n\(\(\s\{8,}[^ ]\|\t\t\+[^\t]\).*\n\)\+/
 syn match  mkdCode         /\%^\(\(\s\{4,}[^ ]\|\t\+[^\t]\).*\n\)\+/
 syn match  mkdCode         /^\s*\n\(\(\s\{4,}[^ ]\|\t\+[^\t]\).*\n\)\+/ contained
 syn match  mkdListItem     /^\s*\%([-*+]\|\d\+\.\)\ze\s\+/ contained
-"syn region mkdListItemLine start="^\s*\%([-*+]\|\d\+\.\)\s\+" end="$" oneline contains=@mkdNonListItem,mkdListItem,@Spell
-"syn region mkdNonListItemBlock start="\(\%^\(\s*\([-*+]\|\d\+\.\)\s\+\)\@!\|\n\(\_^\_$\|\s\{4,}[^ ]\|\t+[^\t]\)\@!\)" end="^\(\s*\([-*+]\|\d\+\.\)\s\+\)\@=" contains=@mkdNonListItem,@Spell
-"-? syn region mkdListItemLine start="^\s*\%([-+]\|\%(\*[[]\@!\)\|\d\+\.\)\s\+" end="$" oneline contains=@mkdNonListItem,mkdListItem,@Spell
-"-? syn region mkdNonListItemBlock start="\(\%^\(\s*\([-+]\|\%(\*[[]\@!\)\|\d\+\.\)\s\+\)\@!\|\n\(\_^\_$\|\s\{4,}[^ ]\|\t+[^\t]\)\@!\)" end="^\(\s*\([-*+]\|\d\+\.\)\s\+\)\@=" contains=@mkdNonListItem,@Spell
-"+ v1: syn region mkdListItemLine start="^\s*\%([-+]\|\%(\*[[]\@!\)\|\d\+\.\)\s\+" end="$" oneline contains=@mkdNonListItem,mkdListItem,@Spell
 syn region mkdListItemLine start="^\s*\%([-+]\|\%(\*[[]\@!\)\|\d\+\.\)\s\+" end="$" oneline contains=@mkdNonListItem,mkdListItem,@Spell
-"+/-: allows too many spaces at '^': syn region mkdNonListItemBlock start="\(\%^\(\s*\([-+]\|\%(\*[[]\@!\)\|\d\+\.\)\s\+\)\@!\|\n\(\_^\_$\|\s\{4,}[^ ]\|\t+[^\t]\)\@!\)" end="^\(\s*\([-+]\|\%(\*[[]\@!\)\|\d\+\.\)\s\+\)\@=" contains=@mkdNonListItem,@Spell
-"-? syn region mkdNonListItemBlock start="\(\%^\(\s*\([-+]\|\%(\*[[]\@!\)\|\d\+\.\)\s\+\)\@!\|\n\(\_^\_$\|\s\{4,}[^ ]\|\t+[^\t]\)\@!\)" end="^\(\s*\([-*+]\|\d\+\.\)\s\+\)\@=" contains=@mkdNonListItem,@Spell
-"? ... syn region mkdNonListItemBlock start="\(\%^\(\(\s*\([-+]\|\d\+\.\)\s\+\)\|\( \{-0,3}\%(\*[[]\@!\)\)\)\@!\|\n\(\_^\_$\|\s\{4,}[^ ]\|\t+[^\t]\)\@!\)" end="^\(\s*\([-+]\|\d\+\.\)\s\+\)\@=" contains=@mkdNonListItem,@Spell
-"+ v1: syn region mkdNonListItemBlock start="\(\%^\(\s*\([-+]\|\d\+\.\)\s\+\)\@!\|\n\(\_^\_$\|\s\{4,}[^ ]\|\( \{-0,3}\%(\*[[]\@!\)\)\|\t+[^\t]\)\@!\)" end="^\(\s*\([-+]\|\%(\*[[]\@!\)\|\d\+\.\)\s\+\)\@=" contains=@mkdNonListItem,@Spell
 " TODO: (on v1): be more accurate: only match 0-3 spaces at '^' everywhere for
 "  the "abbreviation definition" match
 syn region mkdNonListItemBlock start="\(\%^\(\s*\([-+]\|\d\+\.\)\s\+\)\@!\|\n\(\_^\_$\|\s\{4,}[^ ]\|\( \{-0,3}\%(\*[[]\@!\)\)\|\t+[^\t]\)\@!\)" end="^\(\s*\([-+]\|\%(\*[[]\@!\)\|\d\+\.\)\s\+\)\@=" contains=@mkdNonListItem,@Spell
@@ -129,45 +118,12 @@ syn match  mkdRule         /^\s*\*\s\{0,1}\*\s\{0,1}\*\(\*\|\s\)*$/
 syn match  mkdRule         /^\s*-\s\{0,1}-\s\{0,1}-\(-\|\s\)*$/
 syn match  mkdRule         /^\s*_\s\{0,1}_\s\{0,1}_\(_\|\s\)*$/
 
-" [ezequielv] abbreviations (see
+" abbreviations (see
 " https://web.archive.org/web/20170809172955/https://kramdown.gettalong.org/syntax.html
 " ) {{{
-" TODO: mkdAbbrevItemId (the value inside '[]')
-" TODO: ... syn region mkdAbbrevItemAddLines start="\%^\s\{0,3}[^\*]\@!\S" end="\%$" contained
-" TODO: ... syn region mkdAbbrevItemBlock start="\%^\s\{0,3}\*\[[^]]\+\]:\s\+" end="\%$" oneline contains=@mkdNonListItem,mkdAbbrevItemAddLines,@Spell
-"-? syn region mkdAbbrevDef matchgroup=mkdDelimiter   start="^ \{,3}\zs\*\[\^\@!" end="]:" oneline nextgroup=mkdAbbrevDefTarget skipwhite
-"? syn region mkdAbbrevDef matchgroup=mkdDelimiter   start="^ \{,3}\zs\*\[\ze[^]^]" end="]:" oneline nextgroup=mkdAbbrevDefTarget skipwhite
-"? ... syn region mkdAbbrevDef matchgroup=mkdDelimiter   start="\%^ \{,3}\zs\*\[[^]^]" end="]:" oneline nextgroup=mkdAbbrevDefDesc
-"-? ... syn region mkdAbbrevDef matchgroup=mkdDelimiter   start="\%^ \{,3}\zs\*\[" end="]:" oneline skipwhite nextgroup=mkdAbbrevDefDesc
-"? syn region mkdAbbrevDefDesc start="\S" excludenl end="\ze\%$"   contained nextgroup=mkdAbbrevDef skipwhite oneline
-"? syn region mkdAbbrevDefDesc start="\S" excludenl end="\ze\%$"   contained skipwhite oneline contains=@Spell
-"-? ... syn region mkdAbbrevDefDesc start="\S" excludenl end="\ze\n"   contained oneline contains=@Spell
-"
-" {{{
-if 1
-" {{{
-"-? syn match mkdAbbrevDefMatch /\%^ \{,3}\zs\*\[[^]^].\{-}]:\s*\S.*\%$/ contains=mkdAbbrevDefId,mkdAbbrevDefDesc
-"-? (error?): syn match mkdAbbrevDefMatch /\%^[ ]\{0-3}\*\[\{-}]:\s*\S.\{-}\%$/ contains=mkdAbbrevDefId,mkdAbbrevDefDesc
-"+? v2: syn match mkdAbbrevDefMatch /\_^[ ]\{-0,3}\*\[.\{-}]:\s*\S.\{-}\_$/ contains=mkdAbbrevDefId,mkdAbbrevDefDesc transparent contained
 syn match mkdAbbrevDefMatch /\_^[ ]\{-0,3}\*\[.\{-}]:\s*\S.\{-}\_$/ contains=mkdAbbrevDefId contained transparent
-"-? syn match mkdAbbrevDefId /\%^\s*\zs\*\[\{-}]:/    nextgroup=mkdAbbrevDefDesc contained
-"+/-? v1: syn match mkdAbbrevDefId /\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
-"-? syn match mkdAbbrevDefId /\_^[ ]\{-0,3}\zs\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
-"+? v2: syn match mkdAbbrevDefId /\_^[ ]\{-0,3}\zs\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
-"+? v3: syn match mkdAbbrevDefId /\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
 syn match mkdAbbrevDefId /\_^[ ]\{-}\zs\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
-"-? syn region mkdAbbrevDefDesc matchgroup=mkdDelimiter start=/\S/ end=/\%$/ contained skipwhite oneline
-"? syn region mkdAbbrevDefDesc start=/\s*\S/ end=/\n/ contained skipwhite oneline
-"? syn region mkdAbbrevDefDesc start=/\S/ end=/\_$/ contained skipwhite oneline
 syn region mkdAbbrevDefDesc start=/\S/ end=/\_$/ contained skipwhite
-" }}}
-else
-" DEBUG: hard testing {{{
-"+ syn match mkdAbbrevDefId /\_^\*.\{-}]:/
-"+ syn match mkdAbbrevDefId /\_^[ ]\{-0,3}\*\[.\{-}]:/
-syn match mkdAbbrevDefMatch /\_^[ ]\{-0,3}\*\[.\{-}]:/ contained
-" }}}
-endif
 " }}}
 
 " YAML frontmatter
