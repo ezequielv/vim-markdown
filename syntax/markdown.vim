@@ -146,12 +146,16 @@ syn match  mkdRule         /^\s*_\s\{0,1}_\s\{0,1}_\(_\|\s\)*$/
 " {{{
 if 1
 " {{{
-"-? syn match mkdAbbrevMatch /\%^ \{,3}\zs\*\[[^]^].\{-}]:\s*\S.*\%$/ contains=mkdAbbrevDefId,mkdAbbrevDefDesc
-"-? (error?): syn match mkdAbbrevMatch /\%^[ ]\{0-3}\*\[\{-}]:\s*\S.\{-}\%$/ contains=mkdAbbrevDefId,mkdAbbrevDefDesc
-syn match mkdAbbrevMatch /\_^[ ]\{-0,3}\*\[.\{-}]:\s*\S.\{-}\_$/ contains=mkdAbbrevDefId,mkdAbbrevDefDesc
+"-? syn match mkdAbbrevDefMatch /\%^ \{,3}\zs\*\[[^]^].\{-}]:\s*\S.*\%$/ contains=mkdAbbrevDefId,mkdAbbrevDefDesc
+"-? (error?): syn match mkdAbbrevDefMatch /\%^[ ]\{0-3}\*\[\{-}]:\s*\S.\{-}\%$/ contains=mkdAbbrevDefId,mkdAbbrevDefDesc
+"+? v2: syn match mkdAbbrevDefMatch /\_^[ ]\{-0,3}\*\[.\{-}]:\s*\S.\{-}\_$/ contains=mkdAbbrevDefId,mkdAbbrevDefDesc transparent contained
+syn match mkdAbbrevDefMatch /\_^[ ]\{-0,3}\*\[.\{-}]:\s*\S.\{-}\_$/ contains=mkdAbbrevDefId contained transparent
 "-? syn match mkdAbbrevDefId /\%^\s*\zs\*\[\{-}]:/    nextgroup=mkdAbbrevDefDesc contained
 "+/-? v1: syn match mkdAbbrevDefId /\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
-syn match mkdAbbrevDefId /\_^[ ]\{-}\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
+"-? syn match mkdAbbrevDefId /\_^[ ]\{-0,3}\zs\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
+"+? v2: syn match mkdAbbrevDefId /\_^[ ]\{-0,3}\zs\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
+"+? v3: syn match mkdAbbrevDefId /\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
+syn match mkdAbbrevDefId /\_^[ ]\{-}\zs\*.\{-}]:/ nextgroup=mkdAbbrevDefDesc contained skipwhite
 "-? syn region mkdAbbrevDefDesc matchgroup=mkdDelimiter start=/\S/ end=/\%$/ contained skipwhite oneline
 "? syn region mkdAbbrevDefDesc start=/\s*\S/ end=/\n/ contained skipwhite oneline
 "? syn region mkdAbbrevDefDesc start=/\S/ end=/\_$/ contained skipwhite oneline
@@ -160,7 +164,8 @@ syn region mkdAbbrevDefDesc start=/\S/ end=/\_$/ contained skipwhite
 else
 " DEBUG: hard testing {{{
 "+ syn match mkdAbbrevDefId /\_^\*.\{-}]:/
-syn match mkdAbbrevDefId /\_^[ ]\{-0,3}\*\[.\{-}]:/
+"+ syn match mkdAbbrevDefId /\_^[ ]\{-0,3}\*\[.\{-}]:/
+syn match mkdAbbrevDefMatch /\_^[ ]\{-0,3}\*\[.\{-}]:/ contained
 " }}}
 endif
 " }}}
@@ -204,7 +209,7 @@ if get(g:, 'vim_markdown_strikethrough', 0)
     HtmlHiLink mkdStrike        htmlStrike
 endif
 
-syn cluster mkdNonListItem contains=@htmlTop,htmlItalic,htmlBold,htmlBoldItalic,mkdFootnotes,mkdInlineURL,mkdLink,mkdLinkDef,mkdAbbrevDefId,mkdLineBreak,mkdBlockquote,mkdCode,mkdRule,htmlH1,htmlH2,htmlH3,htmlH4,htmlH5,htmlH6,mkdMath,mkdStrike
+syn cluster mkdNonListItem contains=@htmlTop,htmlItalic,htmlBold,htmlBoldItalic,mkdFootnotes,mkdInlineURL,mkdLink,mkdLinkDef,mkdAbbrevDefMatch,mkdLineBreak,mkdBlockquote,mkdCode,mkdRule,htmlH1,htmlH2,htmlH3,htmlH4,htmlH5,htmlH6,mkdMath,mkdStrike
 
 "highlighting for Markdown groups
 HtmlHiLink mkdString        String
